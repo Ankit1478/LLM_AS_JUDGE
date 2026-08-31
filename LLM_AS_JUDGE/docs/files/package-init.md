@@ -1,0 +1,32 @@
+# File Guide: `src/llm_judge/__init__.py`
+
+Actual file: [`src/llm_judge/__init__.py`](../../src/llm_judge/__init__.py)
+
+## Purpose
+
+This file defines the package's public interface. It lets users import important
+objects directly from `llm_judge`.
+
+Without the exports:
+
+```python
+from llm_judge.contracts import EvaluationInput
+```
+
+With the exports:
+
+```python
+from llm_judge import EvaluationInput
+```
+
+## What `__all__` means
+
+`__all__` lists the names intentionally exposed as public project features. It
+also helps readers distinguish supported objects from internal implementation
+details.
+
+## When to update it
+
+Add an object here when another module should be able to use it through a simple
+`from llm_judge import ...` statement. Do not export every helper automatically.
+

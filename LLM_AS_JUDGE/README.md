@@ -2,6 +2,9 @@
 
 This project builds a production-oriented LLM judge one small step at a time.
 
+For beginner-friendly, file-by-file explanations, start with
+[`docs/README.md`](docs/README.md).
+
 ## Step 1: evaluation contract
 
 The judge can score one answer, make a binary decision, or compare two blinded
