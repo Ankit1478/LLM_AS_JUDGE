@@ -4,8 +4,17 @@ This project builds a production-oriented LLM judge one small step at a time.
 
 ## Step 1: evaluation contract
 
-The initial judge evaluates an AI answer against a question and supplied reference
-information. It scores correctness, relevance, completeness, and clarity from 1 to
+The judge can score one answer, make a binary decision, or compare two blinded
+answers with an explicit tie option. Each case declares whether reference evidence
+is required, optional, or intentionally unavailable. Pairwise comparison is the
+preferred mode, while pointwise scoring remains available for diagnostics.
+
+Step 1 also defines the human evaluation procedure, task-complexity categories,
+required example types, position-swap policy, and reliability metrics. Reliability
+thresholds are configured only after measuring a human-labelled baseline rather
+than assuming a universal target.
+
+Pointwise mode scores correctness, relevance, completeness, and clarity from 1 to
 5. The application calculates the final `PASS` or `FAIL` decision.
 
 An answer passes when:
@@ -24,3 +33,13 @@ PYTHONPATH=src python3 -m unittest discover -s tests -v
 ```
 
 Azure integration and the judge prompt intentionally belong to later steps.
+
+## Step 2: scoring rubric
+
+`RUBRIC_V1` defines concrete score anchors from 1 to 5 for correctness,
+relevance, completeness, and clarity. It also records critical-failure rules and
+instructions that prevent length, confidence, formatting, or model identity from
+influencing scores by themselves.
+
+The rubric is versioned as `1.0.0`. Future changes must create a new version so
+stored evaluation results can always be traced to the exact rules used.
