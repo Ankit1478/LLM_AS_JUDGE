@@ -21,7 +21,16 @@ from .contracts import (
     ReliableExamplePolicy,
     TaskComplexity,
 )
-from .rubric import EvaluationRubric, RUBRIC_V1, RubricCriterion
+from .rubric import (
+    ACTIVE_RUBRIC,
+    RUBRIC_V1,
+    RUBRIC_V2,
+    EvaluationRubric,
+    ExampleKind,
+    PairwiseOutcomeGuide,
+    RubricCriterion,
+    RubricExample,
+)
 
 __all__ = [
     "CRITERIA",
@@ -44,6 +53,11 @@ __all__ = [
     "ReliableExamplePolicy",
     "TaskComplexity",
     "EvaluationRubric",
+    "ACTIVE_RUBRIC",
     "RUBRIC_V1",
+    "RUBRIC_V2",
+    "ExampleKind",
+    "PairwiseOutcomeGuide",
     "RubricCriterion",
+    "RubricExample",
 ]

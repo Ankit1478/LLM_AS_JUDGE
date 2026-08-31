@@ -32,25 +32,74 @@ when the application starts instead of producing ambiguous judgments later.
 Combines every `RubricCriterion` into one complete, versioned marking guide. It
 also contains instructions shared by human reviewers and the judge model.
 
+The expanded structure can hold:
+
+- Instructions for score, binary, and pairwise evaluation
+- Instructions for each reference policy
+- Definitions of pairwise outcomes
+- Bias-prevention rules
+- Human-labelled examples
+
 The validator requires each project criterion exactly once. Missing or duplicate
 criteria are rejected.
 
-## `RUBRIC_V1`
+## `RubricExample`
 
-This is the actual rubric currently configured by the project.
+A rubric example demonstrates how a human applied the rules to a real case. Each
+example declares its mode, reference policy, candidates, expected label, and a
+short explanation.
+
+The validator prevents mismatched examples. For instance, a pairwise example must
+contain Candidate B and an expected pairwise decision.
+
+## `PairwiseOutcomeGuide`
+
+Defines the three valid relative-comparison outcomes:
+
+- `A_WINS`: A is meaningfully better.
+- `B_WINS`: B is meaningfully better.
+- `TIE`: Neither answer has a meaningful quality advantage.
+
+## Rubric versions
+
+`RUBRIC_V1` is the original pointwise, reference-based guide:
 
 ```python
 RUBRIC_V1.version
 # "1.0.0"
 ```
 
+`RUBRIC_V2` adds all evaluation modes, reference policies, pairwise outcomes,
+bias controls, and human-labelled examples:
+
+```python
+RUBRIC_V2.version
+# "2.0.0"
+
+ACTIVE_RUBRIC is RUBRIC_V2
+# True
+```
+
 Versioning matters because changing a scoring rule can change evaluation results.
 Stored results should eventually record the exact rubric version used.
+
+V2 contains six example categories:
+
+- Clearly good
+- Clearly bad
+- Borderline
+- Candidate A wins
+- Candidate B wins
+- Pairwise tie
+
+It also tells the future judge to ignore candidate order, model identity, answer
+length by itself, confidence, formatting, style preference, and unsupported
+concreteness.
 
 ## Future use
 
 ```text
-RUBRIC_V1
+ACTIVE_RUBRIC
     ↓
 Prompt builder converts it to clear model instructions
     ↓
@@ -60,4 +109,3 @@ EvaluationResult validates and calculates the decision
 ```
 
 This file does not call the model by itself.
-

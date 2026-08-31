@@ -2,8 +2,21 @@ import unittest
 
 from pydantic import ValidationError
 
-from llm_judge.contracts import Criterion
-from llm_judge.rubric import EvaluationRubric, RUBRIC_V1, RubricCriterion
+from llm_judge.contracts import (
+    Criterion,
+    EvaluationMode,
+    PairwiseDecision,
+    ReferencePolicy,
+)
+from llm_judge.rubric import (
+    ACTIVE_RUBRIC,
+    RUBRIC_V1,
+    RUBRIC_V2,
+    EvaluationRubric,
+    ExampleKind,
+    RubricCriterion,
+    RubricExample,
+)
 
 
 class RubricTests(unittest.TestCase):
@@ -20,6 +33,35 @@ class RubricTests(unittest.TestCase):
 
         self.assertIn("reference", correctness.definition)
         self.assertIn("fabricated", correctness.score_anchors[1])
+
+    def test_v2_is_active_and_preserves_v1(self) -> None:
+        self.assertEqual(RUBRIC_V1.version, "1.0.0")
+        self.assertEqual(RUBRIC_V2.version, "2.0.0")
+        self.assertIs(ACTIVE_RUBRIC, RUBRIC_V2)
+        self.assertEqual(RUBRIC_V2.criteria, RUBRIC_V1.criteria)
+
+    def test_v2_covers_every_mode_and_reference_policy(self) -> None:
+        self.assertEqual(set(RUBRIC_V2.mode_instructions), set(EvaluationMode))
+        self.assertEqual(set(RUBRIC_V2.reference_instructions), set(ReferencePolicy))
+
+    def test_v2_defines_every_pairwise_outcome(self) -> None:
+        self.assertEqual(
+            {guide.decision for guide in RUBRIC_V2.pairwise_outcomes},
+            set(PairwiseDecision),
+        )
+
+    def test_v2_contains_all_required_example_kinds(self) -> None:
+        self.assertEqual(
+            {example.kind for example in RUBRIC_V2.examples},
+            set(ExampleKind),
+        )
+        self.assertEqual(len(RUBRIC_V2.examples), 6)
+
+    def test_v2_has_explicit_bias_controls(self) -> None:
+        guidance = " ".join(RUBRIC_V2.bias_control_instructions).lower()
+
+        for expected in ("order", "model", "length", "confident", "formatting"):
+            self.assertIn(expected, guidance)
 
     def test_incomplete_score_anchors_are_rejected(self) -> None:
         with self.assertRaises(ValidationError):
@@ -50,7 +92,35 @@ class RubricTests(unittest.TestCase):
                 judge_instructions=["Use the supplied evidence."],
             )
 
+    def test_pairwise_example_requires_candidate_b(self) -> None:
+        with self.assertRaises(ValidationError):
+            RubricExample(
+                example_id="invalid-pairwise",
+                kind=ExampleKind.PAIRWISE_A_WINS,
+                mode=EvaluationMode.PAIRWISE,
+                reference_policy=ReferencePolicy.REQUIRED,
+                question="Which answer is better?",
+                reference_answer="The trusted answer.",
+                candidate_a="Only one candidate was supplied.",
+                expected_pairwise_decision=PairwiseDecision.A_WINS,
+                explanation="This example must be rejected.",
+            )
+
+    def test_reference_free_example_rejects_a_reference(self) -> None:
+        with self.assertRaises(ValidationError):
+            RubricExample(
+                example_id="invalid-reference-free",
+                kind=ExampleKind.PAIRWISE_TIE,
+                mode=EvaluationMode.PAIRWISE,
+                reference_policy=ReferencePolicy.REFERENCE_FREE,
+                question="Which answer is clearer?",
+                reference_answer="A reference is forbidden in this mode.",
+                candidate_a="Answer A",
+                candidate_b="Answer B",
+                expected_pairwise_decision=PairwiseDecision.TIE,
+                explanation="This example must be rejected.",
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
-

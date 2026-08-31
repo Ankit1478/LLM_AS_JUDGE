@@ -39,10 +39,16 @@ Azure integration and the judge prompt intentionally belong to later steps.
 
 ## Step 2: scoring rubric
 
-`RUBRIC_V1` defines concrete score anchors from 1 to 5 for correctness,
-relevance, completeness, and clarity. It also records critical-failure rules and
-instructions that prevent length, confidence, formatting, or model identity from
-influencing scores by themselves.
+`RUBRIC_V1` preserves the original reference-based pointwise rubric. `RUBRIC_V2`
+is the active rubric and extends the same 1–5 score anchors with:
 
-The rubric is versioned as `1.0.0`. Future changes must create a new version so
-stored evaluation results can always be traced to the exact rules used.
+- score, binary, and pairwise mode instructions;
+- required, optional, and reference-free guidance;
+- precise `A_WINS`, `B_WINS`, and `TIE` meanings;
+- explicit position, identity, length, confidence, formatting, style, and
+  concreteness bias controls; and
+- six human-labelled examples covering good, bad, borderline, A-wins, B-wins,
+  and tie cases.
+
+The old rubric remains available for reproducibility. New evaluations use
+`ACTIVE_RUBRIC`, currently version `2.0.0`.

@@ -13,6 +13,12 @@ These tests prove that the rubric is complete and internally consistent.
 - A criterion can be looked up by name.
 - Missing score anchors are rejected.
 - A rubric missing required criteria is rejected.
+- V2 is active while V1 remains available for reproducibility.
+- Every evaluation mode and reference policy has instructions.
+- `A_WINS`, `B_WINS`, and `TIE` are all defined.
+- All six human-labelled example types are present.
+- Bias controls cover order, identity, length, confidence, and formatting.
+- Invalid pairwise and reference-free examples are rejected.
 
 ## Why these tests matter
 
@@ -24,4 +30,3 @@ detect that problem before any evaluation is run.
 ```bash
 PYTHONPATH=src python3 -m unittest tests.test_rubric -v
 ```
-
