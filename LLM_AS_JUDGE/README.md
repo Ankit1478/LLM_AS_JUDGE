@@ -104,6 +104,14 @@ It rejects refusals, malformed JSON, invalid or unexpected fields, and mismatche
 case IDs. Only a successfully validated Pydantic result should be stored or used
 for reliability metrics.
 
+## Step 7: Terra + Luna judging
+
+`multi_judge.py` sends the same case and prompt to `gpt-5.6-terra` and
+`gpt-5.6-luna`, then validates both responses independently. Binary and pairwise
+results become final only when both models agree; a 1–1 split is flagged for human
+review. Score results include per-criterion averages and an application-computed
+weighted decision while preserving both original judgments.
+
 Create the local environment and install dependencies:
 
 ```bash

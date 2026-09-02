@@ -8,17 +8,16 @@ learning LLM-as-a-Judge and Python data validation.
 The current evaluation flow is:
 
 ```text
-EvaluationInput (question-paper format)
-                  ↓
-RUBRIC_V1 (teacher's marking guide)
-                  ↓
-Future LLM judge call
-                  ↓
-EvaluationResult (validated result sheet)
+EvaluationInput + active rubric
+              ↓
+       JudgePrompt
+         ↙       ↘
+      Terra      Luna
+         ↘       ↙
+ validated results
+              ↓
+ consensus or human review
 ```
-
-The model call is intentionally not implemented yet. The project currently defines
-and tests the evaluation contract and scoring rubric.
 
 ## File-by-file guide
 
@@ -36,6 +35,7 @@ and tests the evaluation contract and scoring rubric.
 | `src/llm_judge/settings.py` | Validates Azure configuration and protects secrets | [Settings guide](files/settings.md) |
 | `src/llm_judge/azure_client.py` | Sends prompts and captures raw Azure responses | [Azure client guide](files/azure-client.md) |
 | `src/llm_judge/response_parser.py` | Validates raw responses into trusted Pydantic results | [Response parser guide](files/response-parser.md) |
+| `src/llm_judge/multi_judge.py` | Runs Terra and Luna and combines their judgments | [Multi-judge guide](files/multi-judge.md) |
 | `datasets/evaluation_cases.example.jsonl` | Draft cases awaiting human review | [Example dataset guide](files/example-dataset.md) |
 | `datasets/evaluation_cases.example.json` | Pretty human-readable copy of draft cases | [Example dataset guide](files/example-dataset.md) |
 | `tests/test_contracts.py` | Tests contract behavior and validation | [Contract tests guide](files/test-contracts.md) |
@@ -45,6 +45,7 @@ and tests the evaluation contract and scoring rubric.
 | `tests/test_settings.py` | Tests environment configuration | [Settings tests guide](files/test-settings.md) |
 | `tests/test_azure_client.py` | Tests Azure requests using a fake transport | [Azure client tests guide](files/test-azure-client.md) |
 | `tests/test_response_parser.py` | Tests response parsing for all evaluation modes | [Response parser tests guide](files/test-response-parser.md) |
+| `tests/test_multi_judge.py` | Tests Terra/Luna aggregation without network calls | [Multi-judge tests guide](files/test-multi-judge.md) |
 
 ## Useful commands
 

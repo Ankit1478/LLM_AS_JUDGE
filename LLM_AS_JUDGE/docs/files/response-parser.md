@@ -4,7 +4,7 @@ Actual file: [`src/llm_judge/response_parser.py`](../../src/llm_judge/response_p
 
 ## Purpose
 
-This module performs Step 6. It converts Terra's raw JSON text into the correct
+This module performs Step 6. It converts a judge model's raw JSON text into the correct
 Pydantic result:
 
 ```text
@@ -18,7 +18,7 @@ BinaryEvaluationResult, PairwiseEvaluationResult, or EvaluationResult
 ## What it checks
 
 - The response mode matches the submitted case.
-- Terra did not refuse the evaluation.
+- The judge model did not refuse the evaluation.
 - The content is valid JSON.
 - All required fields, enum values, and data types are valid.
 - Unexpected fields are rejected.

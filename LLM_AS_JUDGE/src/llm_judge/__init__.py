@@ -52,6 +52,12 @@ from .response_parser import (
     ParsedJudgeResult,
     parse_judge_response,
 )
+from .multi_judge import (
+    JudgeModel,
+    ModelJudgment,
+    TwoModelJudge,
+    TwoModelJudgeResult,
+)
 
 __all__ = [
     "CRITERIA",
@@ -100,4 +106,8 @@ __all__ = [
     "JudgeResponseValidationError",
     "ParsedJudgeResult",
     "parse_judge_response",
+    "JudgeModel",
+    "ModelJudgment",
+    "TwoModelJudge",
+    "TwoModelJudgeResult",
 ]

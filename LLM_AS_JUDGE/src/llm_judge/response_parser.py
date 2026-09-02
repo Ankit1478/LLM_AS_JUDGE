@@ -22,11 +22,11 @@ ParsedJudgeResult = Union[
 
 
 class JudgeResponseValidationError(ValueError):
-    """Raised when Terra's response cannot be trusted by the application."""
+    """Raised when a judge response cannot be trusted by the application."""
 
 
 class JudgeRefusalError(JudgeResponseValidationError):
-    """Raised when Terra refuses to evaluate a case."""
+    """Raised when a judge model refuses to evaluate a case."""
 
 
 _RESULT_MODEL_BY_MODE: Dict[EvaluationMode, Type[BaseModel]] = {
@@ -40,7 +40,7 @@ def parse_judge_response(
     response: RawJudgeResponse,
     evaluation_input: EvaluationInput,
 ) -> ParsedJudgeResult:
-    """Validate Terra JSON using the Pydantic class for the requested mode.
+    """Validate judge JSON using the Pydantic class for the requested mode.
 
     Raw model text is untrusted. This function checks the mode, refusal state,
     JSON structure, field types and values, and case identity before returning a
