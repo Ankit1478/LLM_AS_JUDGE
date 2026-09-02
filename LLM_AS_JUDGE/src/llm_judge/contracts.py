@@ -320,6 +320,8 @@ class CriterionScore(BaseModel):
     model's private chain of thought.
     """
 
+    model_config = ConfigDict(extra="forbid")
+
     criterion: Criterion
     score: int = Field(ge=1, le=5)
     evidence: str = Field(min_length=1, max_length=500)
@@ -331,6 +333,8 @@ class EvaluationResult(BaseModel):
     The model supplies dimension scores and evidence. Python computes the final
     decision so the result cannot say PASS while its scores require FAIL.
     """
+
+    model_config = ConfigDict(extra="forbid")
 
     case_id: str = Field(min_length=1)
     scores: List[CriterionScore] = Field(min_length=4, max_length=4)
@@ -385,6 +389,8 @@ class BinaryEvaluationResult(BaseModel):
     dimension scores would add little value.
     """
 
+    model_config = ConfigDict(extra="forbid")
+
     case_id: str = Field(min_length=1)
     decision: Decision
     evidence: str = Field(min_length=1, max_length=500)
@@ -396,6 +402,8 @@ class PairwiseEvaluationResult(BaseModel):
     A tie is a real outcome, not an error: forcing a winner can create false
     preferences when both answers have equivalent quality.
     """
+
+    model_config = ConfigDict(extra="forbid")
 
     case_id: str = Field(min_length=1)
     decision: PairwiseDecision

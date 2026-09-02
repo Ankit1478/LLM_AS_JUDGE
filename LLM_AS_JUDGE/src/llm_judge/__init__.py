@@ -46,6 +46,12 @@ from .azure_client import (
     RawJudgeResponse,
     TokenUsage,
 )
+from .response_parser import (
+    JudgeRefusalError,
+    JudgeResponseValidationError,
+    ParsedJudgeResult,
+    parse_judge_response,
+)
 
 __all__ = [
     "CRITERIA",
@@ -90,4 +96,8 @@ __all__ = [
     "JudgeClientError",
     "RawJudgeResponse",
     "TokenUsage",
+    "JudgeRefusalError",
+    "JudgeResponseValidationError",
+    "ParsedJudgeResult",
+    "parse_judge_response",
 ]

@@ -43,8 +43,8 @@ Stores:
 - Finish reason
 - Prompt, completion, and total token counts
 
-This is not the final evaluation result. Step 6 will validate `content` against the
-correct Pydantic result model.
+This is not the final evaluation result. Step 6 in `response_parser.py` validates
+`content` against the correct Pydantic result model.
 
 ## Why the client is injectable
 
@@ -56,4 +56,3 @@ the suite verify exact requests without credentials, network access, or token co
 The request uses JSON Schema with `strict: true`, following the
 [official OpenAI Structured Outputs guide](https://platform.openai.com/docs/guides/structured-outputs).
 Support still depends on the selected Azure deployment and API version.
-

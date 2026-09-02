@@ -96,6 +96,14 @@ names; real secrets must stay outside source control.
 refusals, IDs, finish reason, rubric version, deployment, and token usage. Step 6
 will parse the raw content into a validated result.
 
+## Step 6: response validation
+
+`response_parser.py` converts Terra's raw JSON into `BinaryEvaluationResult`,
+`PairwiseEvaluationResult`, or `EvaluationResult`, based on the requested mode.
+It rejects refusals, malformed JSON, invalid or unexpected fields, and mismatched
+case IDs. Only a successfully validated Pydantic result should be stored or used
+for reliability metrics.
+
 Create the local environment and install dependencies:
 
 ```bash
