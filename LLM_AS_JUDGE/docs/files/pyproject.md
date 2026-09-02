@@ -42,6 +42,16 @@ dependencies = [
 Pydantic validates evaluation inputs, outputs, task settings, and rubric data.
 The OpenAI Python SDK provides the `AzureOpenAI` transport used in Step 5.
 
+### Command-line script
+
+```toml
+[project.scripts]
+llm-judge-run = "llm_judge.dataset_runner:main"
+```
+
+Installing the project creates `.venv/bin/llm-judge-run`, which runs a labelled
+dataset through Terra and Luna.
+
 ### Source layout
 
 ```toml

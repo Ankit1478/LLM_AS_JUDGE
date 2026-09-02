@@ -5,7 +5,7 @@ from typing import Dict, List, Optional, Protocol
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from .azure_client import AzureJudgeClient, RawJudgeResponse
+from .azure_client import AzureJudgeClient, RawJudgeResponse, TokenUsage
 from .contracts import (
     CRITERIA,
     TASK_DEFINITION,
@@ -42,6 +42,11 @@ class ModelJudgment(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     model: JudgeModel
+    deployment: str
+    resolved_model: Optional[str] = None
+    response_id: Optional[str] = None
+    request_id: Optional[str] = None
+    usage: TokenUsage
     result: ParsedJudgeResult
 
 
@@ -114,7 +119,17 @@ class TwoModelJudge:
         for model in (JudgeModel.TERRA, JudgeModel.LUNA):
             raw_response = self._clients[model].evaluate(prompt)
             parsed_result = parse_judge_response(raw_response, evaluation_input)
-            judgments.append(ModelJudgment(model=model, result=parsed_result))
+            judgments.append(
+                ModelJudgment(
+                    model=model,
+                    deployment=raw_response.deployment,
+                    resolved_model=raw_response.model,
+                    response_id=raw_response.response_id,
+                    request_id=raw_response.request_id,
+                    usage=raw_response.usage,
+                    result=parsed_result,
+                )
+            )
 
         return _aggregate(evaluation_input, judgments)
 

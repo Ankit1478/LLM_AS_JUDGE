@@ -58,6 +58,12 @@ from .multi_judge import (
     TwoModelJudge,
     TwoModelJudgeResult,
 )
+from .dataset_runner import (
+    CaseRunResult,
+    CaseRunStatus,
+    DatasetRunReport,
+    DatasetRunner,
+)
 
 __all__ = [
     "CRITERIA",
@@ -110,4 +116,8 @@ __all__ = [
     "ModelJudgment",
     "TwoModelJudge",
     "TwoModelJudgeResult",
+    "CaseRunResult",
+    "CaseRunStatus",
+    "DatasetRunReport",
+    "DatasetRunner",
 ]

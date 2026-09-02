@@ -112,6 +112,30 @@ results become final only when both models agree; a 1–1 split is flagged for h
 review. Score results include per-criterion averages and an application-computed
 weighted decision while preserving both original judgments.
 
+## Step 8: dataset runner
+
+`dataset_runner.py` runs every labelled case through Terra and Luna, validates the
+results, compares the aggregate decision with the human answer key, and writes one
+JSONL record per case. It continues safely after case-level errors and records
+model disagreement, human-review requirements, response metadata, and token use.
+
+Run the included draft dataset for learning (12 cases × 2 models = 24 requests):
+
+```bash
+set -a
+source .env
+set +a
+
+.venv/bin/llm-judge-run \
+  --dataset datasets/evaluation_cases.example.jsonl \
+  --output results/evaluation_results.jsonl \
+  --allow-drafts
+```
+
+For production, omit `--allow-drafts`; the runner will reject any dataset that
+has not passed the human-review and coverage gates. Use `--overwrite` only when
+you intentionally want to replace an existing result file.
+
 Create the local environment and install dependencies:
 
 ```bash

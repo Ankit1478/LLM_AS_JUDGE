@@ -9,10 +9,12 @@ summary of what has been built and the command needed to run the tests.
 
 ## What it contains
 
-- Step 1: the evaluation contract
-- The pointwise pass/fail rules
-- Step 2: the versioned scoring rubric
-- The command for running the test suite
+- Steps 1–2: evaluation contracts and versioned rubric
+- Step 3: human-labelled dataset format
+- Steps 4–6: prompt building, Azure transport, and response validation
+- Step 7: Terra and Luna aggregation
+- Step 8: safe dataset runner and CLI
+- Commands for tests and learning runs
 
 ## README versus `docs/`
 
@@ -27,4 +29,3 @@ Update the root README whenever a major learning step becomes usable, such as:
 - Connecting Azure OpenAI
 - Adding a dataset runner
 - Adding reliability reports
-

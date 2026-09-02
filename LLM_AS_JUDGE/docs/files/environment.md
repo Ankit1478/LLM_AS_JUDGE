@@ -11,7 +11,6 @@ contains placeholders only and must never contain a real API key.
 
 - `AZURE_OPENAI_ENDPOINT`: Your Azure OpenAI resource URL.
 - `AZURE_OPENAI_API_KEY`: Secret credential.
-- `AZURE_OPENAI_DEPLOYMENT`: Judge deployment name, not merely a generic model name.
 - `AZURE_OPENAI_API_VERSION`: API version supported by that Azure resource.
 
 ## Optional controls
@@ -20,7 +19,8 @@ contains placeholders only and must never contain a real API key.
 - SDK retry count
 - Maximum completion tokens
 - Temperature, only for deployments that support it
+- `AZURE_OPENAI_DEPLOYMENT`, only when overriding the default single-model Terra
+  client. The two-model runner always selects Terra and Luna itself.
 
 The application does not automatically read a `.env` file. Production systems
 should inject these values through a secret manager or deployment environment.
-

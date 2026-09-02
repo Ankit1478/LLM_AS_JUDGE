@@ -30,3 +30,6 @@ details.
 Add an object here when another module should be able to use it through a simple
 `from llm_judge import ...` statement. Do not export every helper automatically.
 
+The current public API includes the evaluation contracts, rubric, dataset loader,
+prompt builder, Azure transport, response parser, Terra/Luna judge, and dataset
+runner result types.

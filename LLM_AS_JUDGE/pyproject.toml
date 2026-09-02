@@ -12,5 +12,8 @@ dependencies = [
     "pydantic>=2.9,<3",
 ]
 
+[project.scripts]
+llm-judge-run = "llm_judge.dataset_runner:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]

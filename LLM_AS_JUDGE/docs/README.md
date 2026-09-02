@@ -36,6 +36,7 @@ EvaluationInput + active rubric
 | `src/llm_judge/azure_client.py` | Sends prompts and captures raw Azure responses | [Azure client guide](files/azure-client.md) |
 | `src/llm_judge/response_parser.py` | Validates raw responses into trusted Pydantic results | [Response parser guide](files/response-parser.md) |
 | `src/llm_judge/multi_judge.py` | Runs Terra and Luna and combines their judgments | [Multi-judge guide](files/multi-judge.md) |
+| `src/llm_judge/dataset_runner.py` | Runs both judges across a labelled dataset | [Dataset runner guide](files/dataset-runner.md) |
 | `datasets/evaluation_cases.example.jsonl` | Draft cases awaiting human review | [Example dataset guide](files/example-dataset.md) |
 | `datasets/evaluation_cases.example.json` | Pretty human-readable copy of draft cases | [Example dataset guide](files/example-dataset.md) |
 | `tests/test_contracts.py` | Tests contract behavior and validation | [Contract tests guide](files/test-contracts.md) |
@@ -46,6 +47,7 @@ EvaluationInput + active rubric
 | `tests/test_azure_client.py` | Tests Azure requests using a fake transport | [Azure client tests guide](files/test-azure-client.md) |
 | `tests/test_response_parser.py` | Tests response parsing for all evaluation modes | [Response parser tests guide](files/test-response-parser.md) |
 | `tests/test_multi_judge.py` | Tests Terra/Luna aggregation without network calls | [Multi-judge tests guide](files/test-multi-judge.md) |
+| `tests/test_dataset_runner.py` | Tests safe batch execution and JSONL output | [Dataset runner tests guide](files/test-dataset-runner.md) |
 
 ## Useful commands
 
@@ -60,6 +62,16 @@ Inspect the task configuration:
 ```bash
 PYTHONPATH=src python3 -c \
   'from llm_judge import TASK_DEFINITION; print(TASK_DEFINITION.model_dump_json(indent=2))'
+```
+
+Run the draft example dataset against both Azure models (24 paid requests):
+
+```bash
+set -a
+source .env
+set +a
+.venv/bin/llm-judge-run --dataset datasets/evaluation_cases.example.jsonl \
+  --output results/evaluation_results.jsonl --allow-drafts
 ```
 
 ## How to keep these documents current
