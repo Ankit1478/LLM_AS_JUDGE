@@ -82,3 +82,28 @@ Pydantic response schema, and treats candidate content as untrusted data.
 
 The prompt builder makes no network or Azure call. Its output will be passed to
 the model client in the next step.
+
+## Step 5: Azure OpenAI transport
+
+`settings.py` loads the Azure endpoint, secret API key, API version, timeout,
+retry count, output-token limit, and optional temperature from environment
+variables. The judge uses the `gpt-5.6-terra` deployment by default;
+`AZURE_OPENAI_DEPLOYMENT` is an optional override. `.env.example` documents the
+names; real secrets must stay outside source control.
+
+`azure_client.py` sends a `JudgePrompt` through the official OpenAI Python SDK's
+`AzureOpenAI` client. It requests strict JSON-schema output and returns raw content,
+refusals, IDs, finish reason, rubric version, deployment, and token usage. Step 6
+will parse the raw content into a validated result.
+
+Create the local environment and install dependencies:
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install .
+```
+
+Configure your own Azure values using `.env.example` as a guide. The project does
+not load `.env` automatically; export variables through your shell, deployment
+platform, or secret manager. Structured-output request design follows the
+[official OpenAI documentation](https://platform.openai.com/docs/guides/structured-outputs).

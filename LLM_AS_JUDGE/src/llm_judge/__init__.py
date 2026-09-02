@@ -39,6 +39,13 @@ from .prompt_builder import (
     response_schema_for_mode,
     select_examples,
 )
+from .settings import AzureJudgeSettings, SettingsError
+from .azure_client import (
+    AzureJudgeClient,
+    JudgeClientError,
+    RawJudgeResponse,
+    TokenUsage,
+)
 
 __all__ = [
     "CRITERIA",
@@ -77,4 +84,10 @@ __all__ = [
     "build_judge_prompt",
     "response_schema_for_mode",
     "select_examples",
+    "AzureJudgeSettings",
+    "SettingsError",
+    "AzureJudgeClient",
+    "JudgeClientError",
+    "RawJudgeResponse",
+    "TokenUsage",
 ]

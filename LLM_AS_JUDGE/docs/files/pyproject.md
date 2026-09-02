@@ -33,10 +33,14 @@ This defines the package name, version, and minimum Python version.
 ### Dependencies
 
 ```toml
-dependencies = ["pydantic>=2.9,<3"]
+dependencies = [
+    "openai>=1.42,<3",
+    "pydantic>=2.9,<3",
+]
 ```
 
 Pydantic validates evaluation inputs, outputs, task settings, and rubric data.
+The OpenAI Python SDK provides the `AzureOpenAI` transport used in Step 5.
 
 ### Source layout
 
@@ -51,4 +55,3 @@ This tells Python that importable code lives under the `src/` directory.
 
 Update this file when adding a runtime dependency, changing supported Python
 versions, or preparing a new package release.
-

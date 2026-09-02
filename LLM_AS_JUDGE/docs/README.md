@@ -26,17 +26,23 @@ and tests the evaluation contract and scoring rubric.
 |---|---|---|
 | `README.md` | Project introduction and quick start | [Root README guide](files/root-readme.md) |
 | `pyproject.toml` | Python package and dependency configuration | [pyproject guide](files/pyproject.md) |
+| `.env.example` | Azure environment-variable template | [Environment guide](files/environment.md) |
+| `.gitignore` | Prevents local secrets and generated files from being committed | [Gitignore guide](files/gitignore.md) |
 | `src/llm_judge/__init__.py` | Public package imports | [Package init guide](files/package-init.md) |
 | `src/llm_judge/contracts.py` | Input/output formats and evaluation policy | [Contracts guide](files/contracts.md) |
 | `src/llm_judge/rubric.py` | Rules for assigning scores | [Rubric guide](files/rubric.md) |
 | `src/llm_judge/dataset.py` | Loads and validates labelled cases | [Dataset module guide](files/dataset-module.md) |
 | `src/llm_judge/prompt_builder.py` | Builds safe, mode-specific judge prompts | [Prompt builder guide](files/prompt-builder.md) |
+| `src/llm_judge/settings.py` | Validates Azure configuration and protects secrets | [Settings guide](files/settings.md) |
+| `src/llm_judge/azure_client.py` | Sends prompts and captures raw Azure responses | [Azure client guide](files/azure-client.md) |
 | `datasets/evaluation_cases.example.jsonl` | Draft cases awaiting human review | [Example dataset guide](files/example-dataset.md) |
 | `datasets/evaluation_cases.example.json` | Pretty human-readable copy of draft cases | [Example dataset guide](files/example-dataset.md) |
 | `tests/test_contracts.py` | Tests contract behavior and validation | [Contract tests guide](files/test-contracts.md) |
 | `tests/test_rubric.py` | Tests rubric completeness and validation | [Rubric tests guide](files/test-rubric.md) |
 | `tests/test_dataset.py` | Tests dataset loading and readiness checks | [Dataset tests guide](files/test-dataset.md) |
 | `tests/test_prompt_builder.py` | Tests prompt content and schemas | [Prompt builder tests guide](files/test-prompt-builder.md) |
+| `tests/test_settings.py` | Tests environment configuration | [Settings tests guide](files/test-settings.md) |
+| `tests/test_azure_client.py` | Tests Azure requests using a fake transport | [Azure client tests guide](files/test-azure-client.md) |
 
 ## Useful commands
 
