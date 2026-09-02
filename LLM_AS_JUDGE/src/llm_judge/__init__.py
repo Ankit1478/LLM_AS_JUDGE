@@ -31,6 +31,7 @@ from .rubric import (
     RubricCriterion,
     RubricExample,
 )
+from .dataset import EvaluationCase, EvaluationDataset, ReviewStatus, load_jsonl
 
 __all__ = [
     "CRITERIA",
@@ -60,4 +61,8 @@ __all__ = [
     "PairwiseOutcomeGuide",
     "RubricCriterion",
     "RubricExample",
+    "EvaluationCase",
+    "EvaluationDataset",
+    "ReviewStatus",
+    "load_jsonl",
 ]

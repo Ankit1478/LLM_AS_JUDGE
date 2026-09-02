@@ -29,8 +29,12 @@ and tests the evaluation contract and scoring rubric.
 | `src/llm_judge/__init__.py` | Public package imports | [Package init guide](files/package-init.md) |
 | `src/llm_judge/contracts.py` | Input/output formats and evaluation policy | [Contracts guide](files/contracts.md) |
 | `src/llm_judge/rubric.py` | Rules for assigning scores | [Rubric guide](files/rubric.md) |
+| `src/llm_judge/dataset.py` | Loads and validates labelled cases | [Dataset module guide](files/dataset-module.md) |
+| `datasets/evaluation_cases.example.jsonl` | Draft cases awaiting human review | [Example dataset guide](files/example-dataset.md) |
+| `datasets/evaluation_cases.example.json` | Pretty human-readable copy of draft cases | [Example dataset guide](files/example-dataset.md) |
 | `tests/test_contracts.py` | Tests contract behavior and validation | [Contract tests guide](files/test-contracts.md) |
 | `tests/test_rubric.py` | Tests rubric completeness and validation | [Rubric tests guide](files/test-rubric.md) |
+| `tests/test_dataset.py` | Tests dataset loading and readiness checks | [Dataset tests guide](files/test-dataset.md) |
 
 ## Useful commands
 
@@ -51,4 +55,3 @@ PYTHONPATH=src python3 -c \
 
 When a source file changes, update its matching guide in `docs/files/`. Describe
 why the behavior changed, not only the new class or field name.
-

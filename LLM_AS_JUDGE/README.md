@@ -52,3 +52,23 @@ is the active rubric and extends the same 1–5 score anchors with:
 
 The old rubric remains available for reproducibility. New evaluations use
 `ACTIVE_RUBRIC`, currently version `2.0.0`.
+
+## Step 3: evaluation dataset
+
+`datasets/evaluation_cases.example.jsonl` contains 12 representative draft cases
+in machine-friendly JSONL. `datasets/evaluation_cases.example.json` contains the
+same cases as an indented JSON array for easy human reading. They cover good, bad,
+borderline, A-wins, B-wins, pairwise ties, all evaluation modes, and both
+reference-based and reference-free evaluation.
+
+`dataset.py` loads JSONL, validates mode-specific human labels, rejects duplicate
+IDs, checks minimum category coverage, and blocks draft cases from production.
+The included labels are examples only; humans must confirm them and change
+`review_status` before the file becomes trusted gold data.
+
+Inspect the example dataset:
+
+```bash
+PYTHONPATH=src python3 -c \
+  'from llm_judge import load_jsonl; print(load_jsonl("datasets/evaluation_cases.example.jsonl").kind_counts)'
+```
