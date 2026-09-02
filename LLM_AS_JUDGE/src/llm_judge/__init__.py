@@ -32,6 +32,13 @@ from .rubric import (
     RubricExample,
 )
 from .dataset import EvaluationCase, EvaluationDataset, ReviewStatus, load_jsonl
+from .prompt_builder import (
+    ChatMessage,
+    JudgePrompt,
+    build_judge_prompt,
+    response_schema_for_mode,
+    select_examples,
+)
 
 __all__ = [
     "CRITERIA",
@@ -65,4 +72,9 @@ __all__ = [
     "EvaluationDataset",
     "ReviewStatus",
     "load_jsonl",
+    "ChatMessage",
+    "JudgePrompt",
+    "build_judge_prompt",
+    "response_schema_for_mode",
+    "select_examples",
 ]

@@ -72,3 +72,13 @@ Inspect the example dataset:
 PYTHONPATH=src python3 -c \
   'from llm_judge import load_jsonl; print(load_jsonl("datasets/evaluation_cases.example.jsonl").kind_counts)'
 ```
+
+## Step 4: judge prompt builder
+
+`prompt_builder.py` converts a validated `EvaluationInput` and `ACTIVE_RUBRIC`
+into provider-neutral system and user messages. It selects instructions and
+examples matching the evaluation mode and reference policy, includes the correct
+Pydantic response schema, and treats candidate content as untrusted data.
+
+The prompt builder makes no network or Azure call. Its output will be passed to
+the model client in the next step.
