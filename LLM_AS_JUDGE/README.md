@@ -136,6 +136,23 @@ For production, omit `--allow-drafts`; the runner will reject any dataset that
 has not passed the human-review and coverage gates. Use `--overwrite` only when
 you intentionally want to replace an existing result file.
 
+## Step 9: reliability metrics
+
+`reliability.py` measures Terra-versus-human, Luna-versus-human, combined-versus-
+human, and Terra-versus-Luna agreement. It calculates Cohen's Kappa, Pearson score
+correlation, failures, abstentions, disagreements, and human-review rates. Results
+are also segmented by evaluation mode, and draft or small-sample runs receive
+clear interpretation warnings.
+
+```bash
+.venv/bin/llm-judge-metrics \
+  --input results/evaluation_results.jsonl \
+  --output results/reliability_report.json
+```
+
+Metric calculation is local and does not spend Azure tokens. It does not yet make
+a production approval decision because reliability thresholds are not configured.
+
 Create the local environment and install dependencies:
 
 ```bash

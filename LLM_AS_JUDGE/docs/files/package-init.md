@@ -32,4 +32,4 @@ Add an object here when another module should be able to use it through a simple
 
 The current public API includes the evaluation contracts, rubric, dataset loader,
 prompt builder, Azure transport, response parser, Terra/Luna judge, and dataset
-runner result types.
+runner and reliability-report types.

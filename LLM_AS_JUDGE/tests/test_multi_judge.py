@@ -130,6 +130,16 @@ class TwoModelJudgeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "gpt-5.6-terra"):
             TwoModelJudge(wrong_terra, luna)
 
+    def test_combined_result_requires_one_judgment_per_model(self) -> None:
+        terra = FakeJudgeClient(JudgeModel.TERRA.value, binary_content("PASS"))
+        luna = FakeJudgeClient(JudgeModel.LUNA.value, binary_content("PASS"))
+        result = TwoModelJudge(terra, luna).evaluate(case(EvaluationMode.BINARY))
+        payload = result.model_dump()
+        payload["judgments"][1]["model"] = JudgeModel.TERRA.value
+
+        with self.assertRaisesRegex(ValueError, "one Terra and one Luna"):
+            type(result).model_validate(payload)
+
 
 if __name__ == "__main__":
     unittest.main()

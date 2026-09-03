@@ -3,7 +3,7 @@
 from enum import Enum
 from typing import Dict, List, Optional, Protocol
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from .azure_client import AzureJudgeClient, RawJudgeResponse, TokenUsage
 from .contracts import (
@@ -63,6 +63,17 @@ class TwoModelJudgeResult(BaseModel):
     average_scores: Optional[Dict[Criterion, float]] = None
     average_weighted_score: Optional[float] = None
     requires_human_review: bool
+
+    @model_validator(mode="after")
+    def require_one_result_from_each_model(self) -> "TwoModelJudgeResult":
+        models = [judgment.model for judgment in self.judgments]
+        if set(models) != {JudgeModel.TERRA, JudgeModel.LUNA}:
+            raise ValueError("Result requires exactly one Terra and one Luna judgment")
+        if any(
+            judgment.result.case_id != self.case_id for judgment in self.judgments
+        ):
+            raise ValueError("Every model judgment must match the combined case_id")
+        return self
 
 
 class TwoModelJudge:

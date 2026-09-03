@@ -64,6 +64,16 @@ from .dataset_runner import (
     DatasetRunReport,
     DatasetRunner,
 )
+from .reliability import (
+    AgreementMetrics,
+    ModeReliabilityMetrics,
+    ReliabilityReport,
+    ScoreCorrelationMetrics,
+    calculate_reliability,
+    cohens_kappa,
+    load_case_results,
+    pearson_correlation,
+)
 
 __all__ = [
     "CRITERIA",
@@ -120,4 +130,12 @@ __all__ = [
     "CaseRunStatus",
     "DatasetRunReport",
     "DatasetRunner",
+    "AgreementMetrics",
+    "ModeReliabilityMetrics",
+    "ReliabilityReport",
+    "ScoreCorrelationMetrics",
+    "calculate_reliability",
+    "cohens_kappa",
+    "load_case_results",
+    "pearson_correlation",
 ]

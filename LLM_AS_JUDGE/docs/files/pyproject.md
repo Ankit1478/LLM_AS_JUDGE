@@ -52,6 +52,9 @@ llm-judge-run = "llm_judge.dataset_runner:main"
 Installing the project creates `.venv/bin/llm-judge-run`, which runs a labelled
 dataset through Terra and Luna.
 
+It also creates `.venv/bin/llm-judge-metrics`, which calculates a local reliability
+report from the runner's JSONL output.
+
 ### Source layout
 
 ```toml
