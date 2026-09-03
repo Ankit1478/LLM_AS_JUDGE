@@ -15,6 +15,7 @@ summary of what has been built and the command needed to run the tests.
 - Step 7: Terra and Luna aggregation
 - Step 8: safe dataset runner and CLI
 - Step 9: agreement, Kappa, correlation, and reliability reporting
+- Step 10: repeat consistency, score variation, and position-flip testing
 - Commands for tests and learning runs
 
 ## README versus `docs/`

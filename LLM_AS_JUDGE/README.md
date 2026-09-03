@@ -153,6 +153,28 @@ clear interpretation warnings.
 Metric calculation is local and does not spend Azure tokens. It does not yet make
 a production approval decision because reliability thresholds are not configured.
 
+## Step 10: repeat consistency and position bias
+
+`stability.py` repeats the same unchanged prompt for Terra and Luna, calculates
+decision consistency, and reports score mean, median, standard deviation, and
+range. Pairwise cases are also repeated after swapping A and B. Swapped winners
+are mapped back to the original identities before calculating position-flip rate,
+first/second-position preference, and tie consistency.
+
+First estimate the request count without contacting Azure:
+
+```bash
+.venv/bin/llm-judge-stability \
+  --dataset datasets/evaluation_cases.example.jsonl \
+  --output results/stability_results.jsonl \
+  --repeats 3 --dry-run
+```
+
+The included 12-case dataset requires 108 Azure calls for three repeats across
+Terra, Luna, and both orders of its pairwise cases. The actual learning run needs
+`--allow-drafts`; production mode requires human-reviewed data. The CLI also has
+a paid-call safety limit controlled by `--max-calls`.
+
 Create the local environment and install dependencies:
 
 ```bash

@@ -55,6 +55,9 @@ dataset through Terra and Luna.
 It also creates `.venv/bin/llm-judge-metrics`, which calculates a local reliability
 report from the runner's JSONL output.
 
+`.venv/bin/llm-judge-stability` runs Step 10 repeated and swapped-order model
+experiments.
+
 ### Source layout
 
 ```toml

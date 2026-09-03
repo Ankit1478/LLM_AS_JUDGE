@@ -74,6 +74,19 @@ from .reliability import (
     load_case_results,
     pearson_correlation,
 )
+from .stability import (
+    CriterionVariation,
+    EvaluationOrder,
+    ModelStabilitySummary,
+    ObservationStatus,
+    StabilityCaseResult,
+    StabilityObservation,
+    StabilityReport,
+    StabilityRunner,
+    make_swapped_input,
+    normalize_swapped_decision,
+    planned_call_count,
+)
 
 __all__ = [
     "CRITERIA",
@@ -138,4 +151,15 @@ __all__ = [
     "cohens_kappa",
     "load_case_results",
     "pearson_correlation",
+    "CriterionVariation",
+    "EvaluationOrder",
+    "ModelStabilitySummary",
+    "ObservationStatus",
+    "StabilityCaseResult",
+    "StabilityObservation",
+    "StabilityReport",
+    "StabilityRunner",
+    "make_swapped_input",
+    "normalize_swapped_decision",
+    "planned_call_count",
 ]

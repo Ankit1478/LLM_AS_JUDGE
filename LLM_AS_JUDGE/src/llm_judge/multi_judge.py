@@ -128,21 +128,35 @@ class TwoModelJudge:
         )
         judgments = []
         for model in (JudgeModel.TERRA, JudgeModel.LUNA):
-            raw_response = self._clients[model].evaluate(prompt)
-            parsed_result = parse_judge_response(raw_response, evaluation_input)
-            judgments.append(
-                ModelJudgment(
-                    model=model,
-                    deployment=raw_response.deployment,
-                    resolved_model=raw_response.model,
-                    response_id=raw_response.response_id,
-                    request_id=raw_response.request_id,
-                    usage=raw_response.usage,
-                    result=parsed_result,
-                )
-            )
+            judgments.append(self.evaluate_prompt(model, prompt, evaluation_input))
 
         return _aggregate(evaluation_input, judgments)
+
+    def evaluate_prompt(
+        self,
+        model: JudgeModel,
+        prompt: JudgePrompt,
+        evaluation_input: EvaluationInput,
+    ) -> ModelJudgment:
+        """Evaluate one already-built prompt with one selected judge model.
+
+        Step 10 uses this method so every repeat receives the exact same prompt
+        object. It also keeps provider access and response validation in one place.
+        """
+
+        if prompt.mode != evaluation_input.mode:
+            raise ValueError("Prompt mode must match the evaluation input")
+        raw_response = self._clients[model].evaluate(prompt)
+        parsed_result = parse_judge_response(raw_response, evaluation_input)
+        return ModelJudgment(
+            model=model,
+            deployment=raw_response.deployment,
+            resolved_model=raw_response.model,
+            response_id=raw_response.response_id,
+            request_id=raw_response.request_id,
+            usage=raw_response.usage,
+            result=parsed_result,
+        )
 
 
 def _aggregate(
