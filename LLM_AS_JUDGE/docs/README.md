@@ -39,6 +39,7 @@ EvaluationInput + active rubric
 | `src/llm_judge/dataset_runner.py` | Runs both judges across a labelled dataset | [Dataset runner guide](files/dataset-runner.md) |
 | `src/llm_judge/reliability.py` | Calculates human alignment and reliability metrics | [Reliability guide](files/reliability.md) |
 | `src/llm_judge/stability.py` | Measures repeat consistency and A/B position sensitivity | [Stability guide](files/stability.md) |
+| `src/llm_judge/error_analysis.py` | Classifies errors and calculates confidence intervals | [Error analysis guide](files/error-analysis.md) |
 | `datasets/evaluation_cases.example.jsonl` | Draft cases awaiting human review | [Example dataset guide](files/example-dataset.md) |
 | `datasets/evaluation_cases.example.json` | Pretty human-readable copy of draft cases | [Example dataset guide](files/example-dataset.md) |
 | `tests/test_contracts.py` | Tests contract behavior and validation | [Contract tests guide](files/test-contracts.md) |
@@ -52,6 +53,7 @@ EvaluationInput + active rubric
 | `tests/test_dataset_runner.py` | Tests safe batch execution and JSONL output | [Dataset runner tests guide](files/test-dataset-runner.md) |
 | `tests/test_reliability.py` | Tests Kappa, correlation, rates, and warnings | [Reliability tests guide](files/test-reliability.md) |
 | `tests/test_stability.py` | Tests repeated and swapped-order evaluation | [Stability tests guide](files/test-stability.md) |
+| `tests/test_error_analysis.py` | Tests confusion matrices, error rates, and bootstrap intervals | [Error analysis tests guide](files/test-error-analysis.md) |
 
 ## Useful commands
 
@@ -91,6 +93,14 @@ Estimate Step 10 cost without calling Azure:
 .venv/bin/llm-judge-stability \
   --dataset datasets/evaluation_cases.example.jsonl \
   --output results/stability_results.jsonl --repeats 3 --dry-run
+```
+
+Analyze Step 8 errors and statistical uncertainty without calling Azure:
+
+```bash
+.venv/bin/llm-judge-error-analysis \
+  --input results/evaluation_results.jsonl \
+  --output results/error_analysis_report.json
 ```
 
 ## How to keep these documents current

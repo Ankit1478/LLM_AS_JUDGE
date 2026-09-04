@@ -175,6 +175,32 @@ Terra, Luna, and both orders of its pairwise cases. The actual learning run need
 `--allow-drafts`; production mode requires human-reviewed data. The CLI also has
 a paid-call safety limit controlled by `--max-calls`.
 
+## Step 11: error analysis and statistical confidence
+
+`error_analysis.py` explains *how* each judge is wrong, not only how often it
+agrees with humans. For Terra, Luna, and their combined decision it calculates:
+
+- PASS/FAIL confusion matrices;
+- accuracy, precision, recall, and F1;
+- false-pass rate and the exact false-pass case IDs;
+- false-fail rate and the exact false-fail case IDs;
+- pairwise `A_WINS`, `B_WINS`, and `TIE` confusion and per-label metrics; and
+- percentile-bootstrap confidence intervals with explicit denominators.
+
+Run it on the Step 8 result file:
+
+```bash
+.venv/bin/llm-judge-error-analysis \
+  --input results/evaluation_results.jsonl \
+  --output results/error_analysis_report.json
+```
+
+This command is entirely local and makes no Azure calls. The default is 2,000
+bootstrap samples with a 95% confidence level and deterministic seed 42. A wide
+interval means the dataset is too small or variable for a precise estimate.
+Confidence intervals measure sampling uncertainty; they do not independently
+prove that a judge is safe for production.
+
 Create the local environment and install dependencies:
 
 ```bash

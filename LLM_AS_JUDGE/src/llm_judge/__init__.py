@@ -87,6 +87,17 @@ from .stability import (
     normalize_swapped_decision,
     planned_call_count,
 )
+from .error_analysis import (
+    AnalysisTarget,
+    BinaryClassificationAnalysis,
+    BinaryConfusionMatrix,
+    ErrorAnalysisReport,
+    JudgeErrorAnalysis,
+    MetricEstimate,
+    PairwiseClassificationAnalysis,
+    PairwiseLabelAnalysis,
+    calculate_error_analysis,
+)
 
 __all__ = [
     "CRITERIA",
@@ -162,4 +173,13 @@ __all__ = [
     "make_swapped_input",
     "normalize_swapped_decision",
     "planned_call_count",
+    "AnalysisTarget",
+    "BinaryClassificationAnalysis",
+    "BinaryConfusionMatrix",
+    "ErrorAnalysisReport",
+    "JudgeErrorAnalysis",
+    "MetricEstimate",
+    "PairwiseClassificationAnalysis",
+    "PairwiseLabelAnalysis",
+    "calculate_error_analysis",
 ]

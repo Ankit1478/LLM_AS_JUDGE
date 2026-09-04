@@ -16,6 +16,7 @@ summary of what has been built and the command needed to run the tests.
 - Step 8: safe dataset runner and CLI
 - Step 9: agreement, Kappa, correlation, and reliability reporting
 - Step 10: repeat consistency, score variation, and position-flip testing
+- Step 11: confusion matrices, error types, and bootstrap confidence intervals
 - Commands for tests and learning runs
 
 ## README versus `docs/`
@@ -31,3 +32,4 @@ Update the root README whenever a major learning step becomes usable, such as:
 - Connecting Azure OpenAI
 - Adding a dataset runner
 - Adding reliability reports
+- Adding error analysis or statistical confidence reports

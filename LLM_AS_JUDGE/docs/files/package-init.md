@@ -35,3 +35,5 @@ prompt builder, Azure transport, response parser, Terra/Luna judge, and dataset
 runner and reliability-report types.
 It also exposes the Step 10 stability runner, observations, summaries, and swap
 helpers.
+Step 11 exports its report models, confusion-matrix types, analysis target enum,
+and `calculate_error_analysis` function.

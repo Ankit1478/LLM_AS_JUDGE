@@ -16,6 +16,7 @@ dependencies = [
 llm-judge-run = "llm_judge.dataset_runner:main"
 llm-judge-metrics = "llm_judge.reliability:main"
 llm-judge-stability = "llm_judge.stability:main"
+llm-judge-error-analysis = "llm_judge.error_analysis:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

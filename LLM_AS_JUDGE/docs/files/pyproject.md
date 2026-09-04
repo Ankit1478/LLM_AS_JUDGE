@@ -58,6 +58,9 @@ report from the runner's JSONL output.
 `.venv/bin/llm-judge-stability` runs Step 10 repeated and swapped-order model
 experiments.
 
+`.venv/bin/llm-judge-error-analysis` runs Step 11 local confusion-matrix and
+confidence-interval analysis. It does not contact Azure.
+
 ### Source layout
 
 ```toml
