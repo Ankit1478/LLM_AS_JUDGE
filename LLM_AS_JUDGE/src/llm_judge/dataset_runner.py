@@ -79,7 +79,7 @@ class DatasetRunReport(BaseModel):
     results: List[CaseRunResult]
 
 
-def _human_decision(case: EvaluationCase) -> str:
+def human_decision_for_case(case: EvaluationCase) -> str:
     """Convert the mode-specific human answer key into one comparable label."""
 
     if case.mode == EvaluationMode.BINARY:
@@ -166,7 +166,7 @@ class DatasetRunner:
         include_examples: bool,
         example_limit: int,
     ) -> CaseRunResult:
-        human_decision = _human_decision(case)
+        human_decision = human_decision_for_case(case)
         try:
             judge_result = self._judge.evaluate(
                 case,

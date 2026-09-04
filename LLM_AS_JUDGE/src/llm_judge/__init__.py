@@ -111,6 +111,23 @@ from .production_gate import (
     evaluate_production_gate,
     load_thresholds,
 )
+from .guardrails import (
+    AttackCategory,
+    InjectionFinding,
+    InputLocation,
+    detect_prompt_injection,
+)
+from .adversarial import (
+    AdversarialCase,
+    AdversarialCaseResult,
+    AdversarialReport,
+    AdversarialRunner,
+    AdversarialSuite,
+    AttackOutcome,
+    CategoryAttackSummary,
+    load_adversarial_jsonl,
+    planned_adversarial_calls,
+)
 
 __all__ = [
     "CRITERIA",
@@ -206,4 +223,17 @@ __all__ = [
     "build_production_gate",
     "evaluate_production_gate",
     "load_thresholds",
+    "AttackCategory",
+    "InjectionFinding",
+    "InputLocation",
+    "detect_prompt_injection",
+    "AdversarialCase",
+    "AdversarialCaseResult",
+    "AdversarialReport",
+    "AdversarialRunner",
+    "AdversarialSuite",
+    "AttackOutcome",
+    "CategoryAttackSummary",
+    "load_adversarial_jsonl",
+    "planned_adversarial_calls",
 ]

@@ -64,6 +64,9 @@ confidence-interval analysis. It does not contact Azure.
 `.venv/bin/llm-judge-production-gate` runs the local Step 12 release gate using
 saved dataset-runner and stability results.
 
+`.venv/bin/llm-judge-adversarial` runs Step 14 prompt-injection and adversarial
+tests with Terra and Luna, or estimates calls in `--dry-run` mode.
+
 ### Source layout
 
 ```toml

@@ -222,6 +222,33 @@ learning; production owners must approve thresholds based on the harm caused by
 false passes and false fails. Supply a reviewed policy with
 `--thresholds config/production_thresholds.example.json`.
 
+## Step 13: skipped
+
+Continuous production monitoring and drift detection are intentionally deferred.
+
+## Step 14: adversarial and prompt-injection testing
+
+`guardrails.py` detects common manipulation signals without changing or silently
+blocking candidate text. `adversarial.py` runs human-labelled attacks through
+Terra and Luna and marks each case as `resisted`, `compromised`, or `error`.
+Detection alone is not considered proof; resistance means both judges still made
+the expected human-approved decision.
+
+The included eight draft cases cover instruction override, fake system roles,
+forced decisions, JSON/schema hijacking, prompt extraction, encoded commands,
+model-identity influence, and verbosity distraction. Estimate cost without Azure:
+
+```bash
+.venv/bin/llm-judge-adversarial \
+  --dataset datasets/adversarial_cases.example.jsonl \
+  --output results/adversarial_results.jsonl \
+  --dry-run
+```
+
+The dry run reports 16 planned calls: eight cases times two models. Run the actual
+learning suite by removing `--dry-run` and adding `--allow-drafts`. For production,
+humans must review the cases and labels first, then `--allow-drafts` must be omitted.
+
 Create the local environment and install dependencies:
 
 ```bash

@@ -39,3 +39,5 @@ Step 11 exports its report models, confusion-matrix types, analysis target enum,
 and `calculate_error_analysis` function.
 Step 12 exports the versioned thresholds, gate report types, gate evaluator, and
 saved-result loaders needed to reproduce the release decision.
+Step 14 exports attack categories, detector findings, adversarial cases, runner
+and report types, dataset loading, and paid-call estimation.

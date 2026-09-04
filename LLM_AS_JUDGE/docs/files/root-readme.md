@@ -18,6 +18,8 @@ summary of what has been built and the command needed to run the tests.
 - Step 10: repeat consistency, score variation, and position-flip testing
 - Step 11: confusion matrices, error types, and bootstrap confidence intervals
 - Step 12: threshold checks and the final production release decision
+- Step 13: monitoring intentionally skipped
+- Step 14: prompt-injection detection and adversarial judge testing
 - Commands for tests and learning runs
 
 ## README versus `docs/`
