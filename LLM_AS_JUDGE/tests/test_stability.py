@@ -20,6 +20,8 @@ from llm_judge.stability import (
     EvaluationOrder,
     ObservationStatus,
     StabilityRunner,
+    calculate_stability_report,
+    load_stability_results,
     make_swapped_input,
     normalize_swapped_decision,
     planned_call_count,
@@ -286,6 +288,24 @@ class StabilityTests(unittest.TestCase):
             )
 
         self.assertEqual(evaluator.calls, 0)
+
+    def test_saved_results_can_rebuild_the_same_summary(self) -> None:
+        dataset = EvaluationDataset(cases=[binary_case(), pairwise_case()])
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "stability.jsonl"
+            original = StabilityRunner(SequenceEvaluator()).run(
+                dataset,
+                repeat_count=2,
+                allow_drafts=True,
+                output_path=output,
+            )
+            loaded = load_stability_results(output)
+
+        rebuilt = calculate_stability_report(loaded)
+
+        self.assertEqual(rebuilt.dataset_cases, original.dataset_cases)
+        self.assertEqual(rebuilt.total_calls, original.total_calls)
+        self.assertEqual(rebuilt.per_model, original.per_model)
 
 
 if __name__ == "__main__":

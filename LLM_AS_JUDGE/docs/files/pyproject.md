@@ -61,6 +61,9 @@ experiments.
 `.venv/bin/llm-judge-error-analysis` runs Step 11 local confusion-matrix and
 confidence-interval analysis. It does not contact Azure.
 
+`.venv/bin/llm-judge-production-gate` runs the local Step 12 release gate using
+saved dataset-runner and stability results.
+
 ### Source layout
 
 ```toml

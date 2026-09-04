@@ -581,21 +581,83 @@ def _build_report(
     repeat_count: int,
     results: List[StabilityCaseResult],
 ) -> StabilityReport:
+    """Compatibility wrapper used by the runner after collecting results."""
+
+    return calculate_stability_report(results)
+
+
+def load_stability_results(
+    path: Union[str, Path],
+) -> List[StabilityCaseResult]:
+    """Load and validate the Step 10 one-case-per-model JSONL output."""
+
+    source = Path(path)
+    results = []
+    with source.open("r", encoding="utf-8") as handle:
+        for line_number, raw_line in enumerate(handle, start=1):
+            line = raw_line.strip()
+            if not line:
+                continue
+            try:
+                results.append(StabilityCaseResult.model_validate_json(line))
+            except ValueError as error:
+                raise ValueError(
+                    f"Invalid stability result at {source}:{line_number}"
+                ) from error
+    if not results:
+        raise ValueError(f"Stability result file is empty: {source}")
+    identities = [(result.case_id, result.model) for result in results]
+    duplicates = sorted(
+        f"{case_id}/{model.value}"
+        for (case_id, model), count in Counter(identities).items()
+        if count > 1
+    )
+    if duplicates:
+        raise ValueError(f"Duplicate stability case/model results: {duplicates}")
+    return results
+
+
+def calculate_stability_report(
+    results: Sequence[StabilityCaseResult],
+) -> StabilityReport:
+    """Rebuild aggregate Step 10 metrics from saved stability results."""
+
+    if not results:
+        raise ValueError("At least one stability result is required")
+    case_ids = {result.case_id for result in results}
+    repeat_counts = {result.repeat_count for result in results}
+    if len(repeat_counts) != 1:
+        raise ValueError("Stability results contain different repeat counts")
+    identities = [(result.case_id, result.model) for result in results]
+    if len(set(identities)) != len(identities):
+        raise ValueError("Stability results contain duplicate case/model pairs")
+    expected = {
+        (case_id, model) for case_id in case_ids for model in JudgeModel
+    }
+    missing = expected - set(identities)
+    if missing:
+        rendered = sorted(f"{case_id}/{model.value}" for case_id, model in missing)
+        raise ValueError(f"Stability results are missing case/model pairs: {rendered}")
+
     per_model = {
         model: _model_summary(model, results)
         for model in (JudgeModel.TERRA, JudgeModel.LUNA)
     }
     total_calls = sum(item.total_calls for item in per_model.values())
     failed_calls = sum(item.failed_calls for item in per_model.values())
+    representative_cases = {
+        result.case_id: result for result in results
+    }
     pairwise_cases = sum(
-        case.mode == EvaluationMode.PAIRWISE for case in dataset.cases
+        case.mode == EvaluationMode.PAIRWISE
+        for case in representative_cases.values()
     )
     warnings = []
-    if any(case.review_status == ReviewStatus.DRAFT for case in dataset.cases):
+    if any(case.review_status == ReviewStatus.DRAFT for case in representative_cases.values()):
         warnings.append(
             "Draft human labels are present; this stability run cannot approve production."
         )
-    if len(dataset.cases) < 30:
+    if len(case_ids) < 30:
         warnings.append(
             "Fewer than 30 cases were tested; repeat-consistency estimates are unstable."
         )
@@ -604,8 +666,8 @@ def _build_report(
             "Fewer than 30 pairwise cases were tested; position-flip estimates are unstable."
         )
     return StabilityReport(
-        dataset_cases=len(dataset.cases),
-        repeat_count=repeat_count,
+        dataset_cases=len(case_ids),
+        repeat_count=next(iter(repeat_counts)),
         total_calls=total_calls,
         failed_calls=failed_calls,
         failure_rate=round(failed_calls / total_calls, 4) if total_calls else 0,

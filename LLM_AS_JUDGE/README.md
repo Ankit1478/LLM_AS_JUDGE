@@ -201,6 +201,27 @@ interval means the dataset is too small or variable for a precise estimate.
 Confidence intervals measure sampling uncertainty; they do not independently
 prove that a judge is safe for production.
 
+## Step 12: production release gate
+
+`production_gate.py` reads the saved Step 8 and Step 10 JSONL files, rebuilds the
+Step 9–11 measurements locally, and returns `PASSED` only when every required
+check succeeds. It checks human review status, sample size, failures, disagreement,
+Cohen's Kappa, conservative accuracy and error-rate confidence bounds, score
+correlation, repeat consistency, and position-flip rate.
+
+```bash
+.venv/bin/llm-judge-production-gate \
+  --runner-results results/evaluation_results.jsonl \
+  --stability-results results/stability_results.jsonl \
+  --output results/production_gate_report.json
+```
+
+The gate fails safely when a required measurement is missing. The starting policy
+is shown in `config/production_thresholds.example.json`. These defaults are for
+learning; production owners must approve thresholds based on the harm caused by
+false passes and false fails. Supply a reviewed policy with
+`--thresholds config/production_thresholds.example.json`.
+
 Create the local environment and install dependencies:
 
 ```bash

@@ -17,6 +17,7 @@ summary of what has been built and the command needed to run the tests.
 - Step 9: agreement, Kappa, correlation, and reliability reporting
 - Step 10: repeat consistency, score variation, and position-flip testing
 - Step 11: confusion matrices, error types, and bootstrap confidence intervals
+- Step 12: threshold checks and the final production release decision
 - Commands for tests and learning runs
 
 ## README versus `docs/`

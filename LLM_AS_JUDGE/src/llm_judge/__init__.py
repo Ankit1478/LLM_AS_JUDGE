@@ -83,6 +83,8 @@ from .stability import (
     StabilityObservation,
     StabilityReport,
     StabilityRunner,
+    calculate_stability_report,
+    load_stability_results,
     make_swapped_input,
     normalize_swapped_decision,
     planned_call_count,
@@ -97,6 +99,17 @@ from .error_analysis import (
     PairwiseClassificationAnalysis,
     PairwiseLabelAnalysis,
     calculate_error_analysis,
+)
+from .production_gate import (
+    DEFAULT_PRODUCTION_THRESHOLDS,
+    GateComparator,
+    GateDecision,
+    ProductionGateCheck,
+    ProductionGateReport,
+    ProductionThresholds,
+    build_production_gate,
+    evaluate_production_gate,
+    load_thresholds,
 )
 
 __all__ = [
@@ -170,6 +183,8 @@ __all__ = [
     "StabilityObservation",
     "StabilityReport",
     "StabilityRunner",
+    "calculate_stability_report",
+    "load_stability_results",
     "make_swapped_input",
     "normalize_swapped_decision",
     "planned_call_count",
@@ -182,4 +197,13 @@ __all__ = [
     "PairwiseClassificationAnalysis",
     "PairwiseLabelAnalysis",
     "calculate_error_analysis",
+    "DEFAULT_PRODUCTION_THRESHOLDS",
+    "GateComparator",
+    "GateDecision",
+    "ProductionGateCheck",
+    "ProductionGateReport",
+    "ProductionThresholds",
+    "build_production_gate",
+    "evaluate_production_gate",
+    "load_thresholds",
 ]
