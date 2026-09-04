@@ -128,6 +128,23 @@ from .adversarial import (
     load_adversarial_jsonl,
     planned_adversarial_calls,
 )
+from .calibration import (
+    DEFAULT_CALIBRATION_POLICY,
+    CalibrationAcceptancePolicy,
+    CalibrationComparisonReport,
+    CalibrationDecision,
+    DatasetSplit,
+    DatasetSplitManifest,
+    HeldoutVerificationReport,
+    MetricChange,
+    MetricComparison,
+    MetricDirection,
+    compare_calibration_runs,
+    load_split_manifest,
+    save_dataset_split,
+    split_evaluation_dataset,
+    verify_heldout_run,
+)
 
 __all__ = [
     "CRITERIA",
@@ -236,4 +253,19 @@ __all__ = [
     "CategoryAttackSummary",
     "load_adversarial_jsonl",
     "planned_adversarial_calls",
+    "DEFAULT_CALIBRATION_POLICY",
+    "CalibrationAcceptancePolicy",
+    "CalibrationComparisonReport",
+    "CalibrationDecision",
+    "DatasetSplit",
+    "DatasetSplitManifest",
+    "HeldoutVerificationReport",
+    "MetricChange",
+    "MetricComparison",
+    "MetricDirection",
+    "compare_calibration_runs",
+    "load_split_manifest",
+    "save_dataset_split",
+    "split_evaluation_dataset",
+    "verify_heldout_run",
 ]

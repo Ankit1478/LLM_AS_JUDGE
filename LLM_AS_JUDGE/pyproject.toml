@@ -19,6 +19,7 @@ llm-judge-stability = "llm_judge.stability:main"
 llm-judge-error-analysis = "llm_judge.error_analysis:main"
 llm-judge-production-gate = "llm_judge.production_gate:main"
 llm-judge-adversarial = "llm_judge.adversarial:main"
+llm-judge-calibration = "llm_judge.calibration:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

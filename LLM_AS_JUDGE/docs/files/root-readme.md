@@ -20,6 +20,8 @@ summary of what has been built and the command needed to run the tests.
 - Step 12: threshold checks and the final production release decision
 - Step 13: monitoring intentionally skipped
 - Step 14: prompt-injection detection and adversarial judge testing
+- Step 15: adversarial production-gate integration intentionally skipped
+- Step 16: calibration comparison and protected held-out testing
 - Commands for tests and learning runs
 
 ## README versus `docs/`

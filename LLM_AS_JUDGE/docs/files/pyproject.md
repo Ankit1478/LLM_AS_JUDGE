@@ -67,6 +67,9 @@ saved dataset-runner and stability results.
 `.venv/bin/llm-judge-adversarial` runs Step 14 prompt-injection and adversarial
 tests with Terra and Luna, or estimates calls in `--dry-run` mode.
 
+`.venv/bin/llm-judge-calibration` runs Step 16 dataset splitting, calibration-run
+comparison, and protected held-out verification.
+
 ### Source layout
 
 ```toml

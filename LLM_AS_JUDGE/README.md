@@ -249,6 +249,59 @@ The dry run reports 16 planned calls: eight cases times two models. Run the actu
 learning suite by removing `--dry-run` and adding `--allow-drafts`. For production,
 humans must review the cases and labels first, then `--allow-drafts` must be omitted.
 
+## Step 15: skipped
+
+Connecting the optional adversarial suite to the production gate is intentionally
+deferred.
+
+## Step 16: calibration and held-out testing
+
+`calibration.py` creates a deterministic split stratified by evaluation mode:
+one reusable calibration partition and one protected held-out partition. A SHA-256
+manifest records the exact case IDs and dataset fingerprints.
+
+Create the split for the included draft learning dataset:
+
+```bash
+.venv/bin/llm-judge-calibration split \
+  --dataset datasets/evaluation_cases.example.jsonl \
+  --calibration-output datasets/calibration.example.jsonl \
+  --heldout-output datasets/heldout.example.jsonl \
+  --manifest-output datasets/calibration_split.example.json \
+  --allow-drafts
+```
+
+Run Step 8 on the calibration file before and after a developer-approved prompt,
+rubric, example, or threshold change. Then compare the two saved result files:
+
+```bash
+.venv/bin/llm-judge-calibration compare \
+  --baseline-results results/calibration_baseline.jsonl \
+  --candidate-results results/calibration_candidate.jsonl \
+  --manifest datasets/calibration_split.example.json \
+  --baseline-version rubric-v2 \
+  --candidate-version rubric-v3 \
+  --change-summary "Do not penalize short answers only for being short" \
+  --reviewed-by developer-name \
+  --output results/calibration_comparison.json
+```
+
+The comparison shows improved, unchanged, regressed, fixed-error, and new-error
+cases. It rejects changed human labels or unexpected case IDs. Only after a change
+is accepted should its configuration be locked and run once on the held-out file:
+
+```bash
+.venv/bin/llm-judge-calibration verify \
+  --results results/heldout_locked.jsonl \
+  --manifest datasets/calibration_split.example.json \
+  --comparison results/calibration_comparison.json \
+  --configuration-version rubric-v3 \
+  --output results/heldout_verification.json
+```
+
+Splitting, comparing, and verifying are local. The Azure calls occur only when
+the existing Step 8 runner is explicitly used to generate the result files.
+
 Create the local environment and install dependencies:
 
 ```bash

@@ -43,6 +43,7 @@ EvaluationInput + active rubric
 | `src/llm_judge/production_gate.py` | Converts reliability evidence into a release decision | [Production gate guide](files/production-gate.md) |
 | `src/llm_judge/guardrails.py` | Detects common judge-manipulation signals | [Guardrails guide](files/guardrails.md) |
 | `src/llm_judge/adversarial.py` | Runs and reports the Step 14 red-team suite | [Adversarial runner guide](files/adversarial.md) |
+| `src/llm_judge/calibration.py` | Splits data and compares calibrated judge versions | [Calibration guide](files/calibration.md) |
 | `config/production_thresholds.example.json` | Editable Step 12 threshold policy | [Production gate guide](files/production-gate.md) |
 | `datasets/adversarial_cases.example.jsonl` | Machine-friendly draft attack suite | [Adversarial dataset guide](files/adversarial-dataset.md) |
 | `datasets/adversarial_cases.example.json` | Human-readable draft attack suite | [Adversarial dataset guide](files/adversarial-dataset.md) |
@@ -62,6 +63,7 @@ EvaluationInput + active rubric
 | `tests/test_error_analysis.py` | Tests confusion matrices, error rates, and bootstrap intervals | [Error analysis tests guide](files/test-error-analysis.md) |
 | `tests/test_production_gate.py` | Tests passing, failing, and missing-evidence gates | [Production gate tests guide](files/test-production-gate.md) |
 | `tests/test_adversarial.py` | Tests detection, red-team execution, and safe failures | [Adversarial tests guide](files/test-adversarial.md) |
+| `tests/test_calibration.py` | Tests split isolation, comparison, and held-out verification | [Calibration tests guide](files/test-calibration.md) |
 
 ## Useful commands
 
@@ -126,6 +128,16 @@ Estimate Step 14 attack-suite calls without contacting Azure:
 .venv/bin/llm-judge-adversarial \
   --dataset datasets/adversarial_cases.example.jsonl \
   --output results/adversarial_results.jsonl --dry-run
+```
+
+Create the Step 16 calibration and held-out partitions:
+
+```bash
+.venv/bin/llm-judge-calibration split \
+  --dataset datasets/evaluation_cases.example.jsonl \
+  --calibration-output datasets/calibration.example.jsonl \
+  --heldout-output datasets/heldout.example.jsonl \
+  --manifest-output datasets/calibration_split.example.json --allow-drafts
 ```
 
 ## How to keep these documents current
