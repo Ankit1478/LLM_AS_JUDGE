@@ -1,0 +1,32 @@
+ 1. Choose a real system
+
+     Examples: chatbot, RAG application, summarizer, or AI agent.
+
+  2. Define system-specific metrics
+      - Correctness
+      - Relevance
+      - Faithfulness
+      - Tool-call correctness
+      - Safety
+      - Latency
+      - Cost
+
+  3. Combine evaluator types
+      - Deterministic Python checks
+      - Reference-based metrics
+      - LLM-as-a-Judge
+      - Human evaluation
+
+  4. Build regression evals
+
+     Run the same dataset whenever the prompt, model, retrieval system, or code changes.
+
+  5. Compare versions
+
+  Prompt v1 vs Prompt v2
+  Terra vs Luna
+  Old RAG pipeline vs New RAG pipeline
+
+  6. Add CI/CD gates
+
+     Block a release when important eval metrics regr
