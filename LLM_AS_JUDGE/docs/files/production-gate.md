@@ -17,6 +17,7 @@ Step 10 stability results ─────────────┘
 
 ## What the default policy checks
 
+- The exact active rubric has passed human validation and independent approval.
 - Step 8 and Step 10 contain the same case IDs.
 - No dataset label is still marked `draft`.
 - At least 100 cases completed.
@@ -61,12 +62,20 @@ human escalation capacity, then version and review the policy.
 .venv/bin/llm-judge-production-gate \
   --runner-results results/evaluation_results.jsonl \
   --stability-results results/stability_results.jsonl \
+  --rubric-approval config/rubric_approval.json \
   --thresholds config/production_thresholds.example.json \
   --output results/production_gate_report.json
 ```
 
 The command prints the complete JSON report and optionally saves it. Use
 `--overwrite` only when intentionally replacing an older decision.
+It exits with status `1` when the decision is `FAILED`, allowing CI/CD to block
+the deployment without parsing the JSON report.
+
+The approval file is mandatory. The gate verifies its rubric name, semantic
+version, whole-rubric SHA-256 fingerprint, human evidence, reviewer roles,
+separation of duties, review dates, and expiration. A missing, draft, expired,
+or stale approval makes the whole release decision fail.
 
 ## Important limitation
 

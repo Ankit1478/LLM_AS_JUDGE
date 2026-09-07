@@ -43,3 +43,5 @@ Step 14 exports attack categories, detector findings, adversarial cases, runner
 and report types, dataset loading, and paid-call estimation.
 Step 16 exports its split manifest, comparison and verification reports,
 acceptance policy, and workflow functions.
+Rubric-governance exports include approval status, reviewers, validation evidence,
+fingerprinting, control results, and strict approval loading.

@@ -213,6 +213,7 @@ correlation, repeat consistency, and position-flip rate.
 .venv/bin/llm-judge-production-gate \
   --runner-results results/evaluation_results.jsonl \
   --stability-results results/stability_results.jsonl \
+  --rubric-approval config/rubric_approval.json \
   --output results/production_gate_report.json
 ```
 
@@ -221,6 +222,31 @@ is shown in `config/production_thresholds.example.json`. These defaults are for
 learning; production owners must approve thresholds based on the harm caused by
 false passes and false fails. Supply a reviewed policy with
 `--thresholds config/production_thresholds.example.json`.
+
+### Rubric approval gate
+
+High agreement only proves that the judge follows a rubric; it does not prove the
+rubric represents a product worth shipping. `rubric_approval.py` therefore makes
+production approval a separate human-governance control.
+
+An approval must match the active rubric's name, version, and SHA-256 fingerprint;
+include passed evidence from at least 30 human-reviewed cases; have approvals from
+different domain and product owners; and have active, unexpired dates. Any rubric
+edit changes its fingerprint and invalidates the old approval.
+
+`config/rubric_approval.example.json` is deliberately marked `draft`. Copy it to
+a controlled approval file and replace its placeholder evidence only after real
+review. Check it locally with:
+
+```bash
+.venv/bin/llm-judge-rubric-approval \
+  --approval config/rubric_approval.json
+```
+
+The production gate now requires `--rubric-approval` and fails closed when the
+approval is missing, rejected, expired, insufficiently reviewed, or for a
+different rubric. A failed gate exits with status `1`, so CI/CD can block the
+release automatically.
 
 ## Step 13: skipped
 

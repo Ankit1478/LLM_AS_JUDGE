@@ -83,6 +83,10 @@ ACTIVE_RUBRIC is RUBRIC_V2
 Versioning matters because changing a scoring rule can change evaluation results.
 Stored results should eventually record the exact rubric version used.
 
+Versioning alone does not prove that the rubric's rules are suitable for the
+product. `rubric_approval.py` separately requires human validation evidence and
+independent approval of the exact rubric fingerprint before Step 12 can pass.
+
 V2 contains six example categories:
 
 - Clearly good

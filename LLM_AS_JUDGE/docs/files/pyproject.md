@@ -70,6 +70,9 @@ tests with Terra and Luna, or estimates calls in `--dry-run` mode.
 `.venv/bin/llm-judge-calibration` runs Step 16 dataset splitting, calibration-run
 comparison, and protected held-out verification.
 
+`.venv/bin/llm-judge-rubric-approval` validates a human-governance artifact
+against every field of the active rubric.
+
 ### Source layout
 
 ```toml

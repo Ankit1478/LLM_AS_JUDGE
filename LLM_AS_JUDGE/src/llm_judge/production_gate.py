@@ -16,6 +16,13 @@ from .error_analysis import (
 )
 from .multi_judge import JudgeModel
 from .reliability import ReliabilityReport, calculate_reliability, load_case_results
+from .rubric import ACTIVE_RUBRIC
+from .rubric_approval import (
+    RubricApproval,
+    RubricApprovalValidation,
+    load_rubric_approval,
+    validate_rubric_approval,
+)
 from .stability import (
     StabilityCaseResult,
     StabilityReport,
@@ -94,6 +101,7 @@ class ProductionGateReport(BaseModel):
     decision: GateDecision
     threshold_version: str
     thresholds: ProductionThresholds
+    rubric_approval: Optional[RubricApprovalValidation] = None
     total_checks: int = Field(ge=1)
     passed_checks: int = Field(ge=0)
     failed_checks: int = Field(ge=0)
@@ -152,6 +160,7 @@ def evaluate_production_gate(
     *,
     draft_cases: int,
     matching_case_sets: bool,
+    rubric_approval: Optional[RubricApprovalValidation] = None,
     thresholds: ProductionThresholds = DEFAULT_PRODUCTION_THRESHOLDS,
 ) -> ProductionGateReport:
     """Evaluate the saved Step 9–11 evidence against production thresholds."""
@@ -160,6 +169,19 @@ def evaluate_production_gate(
     pass_fail = aggregate_errors.pass_fail_overall
     pairwise = aggregate_errors.pairwise
     checks = [
+        _check(
+            "rubric_approval",
+            "The exact active rubric must have valid human production approval",
+            "rubric approval governance",
+            (
+                1.0
+                if rubric_approval is not None
+                and rubric_approval.valid_for_production
+                else 0.0
+            ),
+            GateComparator.EQUAL,
+            1.0,
+        ),
         _check(
             "matching_case_sets",
             "Step 8 and Step 10 must cover the same case IDs",
@@ -300,6 +322,7 @@ def evaluate_production_gate(
         decision=decision,
         threshold_version=thresholds.version,
         thresholds=thresholds,
+        rubric_approval=rubric_approval,
         total_checks=len(checks),
         passed_checks=len(checks) - len(failed_ids),
         failed_checks=len(failed_ids),
@@ -318,6 +341,7 @@ def build_production_gate(
     runner_results: Sequence[CaseRunResult],
     stability_results: Sequence[StabilityCaseResult],
     *,
+    rubric_approval: RubricApproval,
     thresholds: ProductionThresholds = DEFAULT_PRODUCTION_THRESHOLDS,
     bootstrap_iterations: int = 2000,
     confidence_level: float = 0.95,
@@ -347,6 +371,7 @@ def build_production_gate(
         calculate_stability_report(stability_results),
         draft_cases=len(draft_case_ids),
         matching_case_sets=runner_ids == stability_ids,
+        rubric_approval=validate_rubric_approval(ACTIVE_RUBRIC, rubric_approval),
         thresholds=thresholds,
     )
 
@@ -374,6 +399,11 @@ def main() -> None:
         "--stability-results", required=True, help="Step 10 JSONL result file"
     )
     parser.add_argument("--thresholds", help="Optional threshold-policy JSON file")
+    parser.add_argument(
+        "--rubric-approval",
+        required=True,
+        help="Human approval JSON for the exact active rubric",
+    )
     parser.add_argument("--output", help="Optional production-gate JSON report")
     parser.add_argument("--bootstrap-iterations", type=int, default=2000)
     parser.add_argument("--confidence-level", type=float, default=0.95)
@@ -384,6 +414,7 @@ def main() -> None:
     report = build_production_gate(
         load_case_results(args.runner_results),
         load_stability_results(args.stability_results),
+        rubric_approval=load_rubric_approval(args.rubric_approval),
         thresholds=load_thresholds(args.thresholds),
         bootstrap_iterations=args.bootstrap_iterations,
         confidence_level=args.confidence_level,
@@ -398,6 +429,8 @@ def main() -> None:
         ) as handle:
             handle.write(rendered + "\n")
     print(rendered)
+    if report.decision == GateDecision.FAILED:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

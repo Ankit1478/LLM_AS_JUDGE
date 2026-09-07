@@ -30,6 +30,7 @@ EvaluationInput + active rubric
 | `src/llm_judge/__init__.py` | Public package imports | [Package init guide](files/package-init.md) |
 | `src/llm_judge/contracts.py` | Input/output formats and evaluation policy | [Contracts guide](files/contracts.md) |
 | `src/llm_judge/rubric.py` | Rules for assigning scores | [Rubric guide](files/rubric.md) |
+| `src/llm_judge/rubric_approval.py` | Validates human approval of the exact rubric | [Rubric approval guide](files/rubric-approval.md) |
 | `src/llm_judge/dataset.py` | Loads and validates labelled cases | [Dataset module guide](files/dataset-module.md) |
 | `src/llm_judge/prompt_builder.py` | Builds safe, mode-specific judge prompts | [Prompt builder guide](files/prompt-builder.md) |
 | `src/llm_judge/settings.py` | Validates Azure configuration and protects secrets | [Settings guide](files/settings.md) |
@@ -45,12 +46,14 @@ EvaluationInput + active rubric
 | `src/llm_judge/adversarial.py` | Runs and reports the Step 14 red-team suite | [Adversarial runner guide](files/adversarial.md) |
 | `src/llm_judge/calibration.py` | Splits data and compares calibrated judge versions | [Calibration guide](files/calibration.md) |
 | `config/production_thresholds.example.json` | Editable Step 12 threshold policy | [Production gate guide](files/production-gate.md) |
+| `config/rubric_approval.example.json` | Deliberately unapproved governance template | [Rubric approval guide](files/rubric-approval.md) |
 | `datasets/adversarial_cases.example.jsonl` | Machine-friendly draft attack suite | [Adversarial dataset guide](files/adversarial-dataset.md) |
 | `datasets/adversarial_cases.example.json` | Human-readable draft attack suite | [Adversarial dataset guide](files/adversarial-dataset.md) |
 | `datasets/evaluation_cases.example.jsonl` | Draft cases awaiting human review | [Example dataset guide](files/example-dataset.md) |
 | `datasets/evaluation_cases.example.json` | Pretty human-readable copy of draft cases | [Example dataset guide](files/example-dataset.md) |
 | `tests/test_contracts.py` | Tests contract behavior and validation | [Contract tests guide](files/test-contracts.md) |
 | `tests/test_rubric.py` | Tests rubric completeness and validation | [Rubric tests guide](files/test-rubric.md) |
+| `tests/test_rubric_approval.py` | Tests identity, evidence, reviewers, and expiration | [Rubric approval tests guide](files/test-rubric-approval.md) |
 | `tests/test_dataset.py` | Tests dataset loading and readiness checks | [Dataset tests guide](files/test-dataset.md) |
 | `tests/test_prompt_builder.py` | Tests prompt content and schemas | [Prompt builder tests guide](files/test-prompt-builder.md) |
 | `tests/test_settings.py` | Tests environment configuration | [Settings tests guide](files/test-settings.md) |
@@ -119,6 +122,7 @@ Make the final local Step 12 release decision:
 .venv/bin/llm-judge-production-gate \
   --runner-results results/evaluation_results.jsonl \
   --stability-results results/stability_results.jsonl \
+  --rubric-approval config/rubric_approval.json \
   --output results/production_gate_report.json
 ```
 

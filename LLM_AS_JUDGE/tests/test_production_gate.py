@@ -1,5 +1,6 @@
 import tempfile
 import unittest
+from datetime import date
 from pathlib import Path
 
 from llm_judge.contracts import EvaluationMode
@@ -25,6 +26,17 @@ from llm_judge.reliability import (
     ScoreCorrelationMetrics,
 )
 from llm_judge.stability import ModelStabilitySummary, StabilityReport
+from llm_judge.rubric import ACTIVE_RUBRIC
+from llm_judge.rubric_approval import ApprovalStatus, validate_rubric_approval
+from test_rubric_approval import valid_approval
+
+
+def valid_rubric_validation():
+    return validate_rubric_approval(
+        ACTIVE_RUBRIC,
+        valid_approval(),
+        evaluated_on=date(2026, 9, 7),
+    )
 
 
 def estimate(value, lower=None, upper=None, denominator=100):
@@ -183,6 +195,7 @@ class ProductionGateTests(unittest.TestCase):
             stability_report(),
             draft_cases=0,
             matching_case_sets=True,
+            rubric_approval=valid_rubric_validation(),
         )
 
         self.assertEqual(report.decision, GateDecision.PASSED)
@@ -217,6 +230,7 @@ class ProductionGateTests(unittest.TestCase):
             stability_report(),
             draft_cases=3,
             matching_case_sets=False,
+            rubric_approval=valid_rubric_validation(),
         )
 
         self.assertEqual(report.decision, GateDecision.FAILED)
@@ -236,6 +250,7 @@ class ProductionGateTests(unittest.TestCase):
             stability_report(),
             draft_cases=0,
             matching_case_sets=True,
+            rubric_approval=valid_rubric_validation(),
         )
         check = next(
             item for item in report.checks if item.check_id == "model_disagreement_rate"
@@ -244,6 +259,40 @@ class ProductionGateTests(unittest.TestCase):
         self.assertFalse(check.passed)
         self.assertIsNone(check.observed)
         self.assertIn("unavailable", check.explanation)
+
+    def test_missing_rubric_approval_fails_even_when_metrics_pass(self):
+        report = evaluate_production_gate(
+            reliability_report(),
+            error_report(),
+            stability_report(),
+            draft_cases=0,
+            matching_case_sets=True,
+        )
+
+        self.assertEqual(report.decision, GateDecision.FAILED)
+        self.assertIn("rubric_approval", report.failed_check_ids)
+
+    def test_invalid_rubric_approval_fails_even_when_metrics_pass(self):
+        draft_approval = valid_approval().model_copy(
+            update={"status": ApprovalStatus.DRAFT}
+        )
+        invalid_validation = validate_rubric_approval(
+            ACTIVE_RUBRIC,
+            draft_approval,
+            evaluated_on=date(2026, 9, 7),
+        )
+
+        report = evaluate_production_gate(
+            reliability_report(),
+            error_report(),
+            stability_report(),
+            draft_cases=0,
+            matching_case_sets=True,
+            rubric_approval=invalid_validation,
+        )
+
+        self.assertEqual(report.decision, GateDecision.FAILED)
+        self.assertIn("rubric_approval", report.failed_check_ids)
 
     def test_custom_threshold_file_is_validated(self):
         custom = ProductionThresholds(minimum_completed_cases=250)
