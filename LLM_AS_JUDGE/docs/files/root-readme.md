@@ -9,6 +9,8 @@ summary of what has been built and the command needed to run the tests.
 
 ## What it contains
 
+- An end-to-end ASCII diagram showing the human, model, measurement, release,
+  calibration, and adversarial paths
 - Steps 1–2: evaluation contracts and versioned rubric
 - Step 3: human-labelled dataset format
 - Steps 4–6: prompt building, Azure transport, and response validation
@@ -18,6 +20,7 @@ summary of what has been built and the command needed to run the tests.
 - Step 10: repeat consistency, score variation, and position-flip testing
 - Step 11: confusion matrices, error types, and bootstrap confidence intervals
 - Step 12: threshold checks and the final production release decision
+- The separate exact-rubric human approval required by Step 12
 - Step 13: monitoring intentionally skipped
 - Step 14: prompt-injection detection and adversarial judge testing
 - Step 15: adversarial production-gate integration intentionally skipped

@@ -5,6 +5,133 @@ This project builds a production-oriented LLM judge one small step at a time.
 For beginner-friendly, file-by-file explanations, start with
 [`docs/README.md`](docs/README.md).
 
+## Full end-to-end flow
+
+The project has five connected parts: define the evaluation, run two judges,
+measure reliability, make the release decision, and improve or attack-test it.
+
+```text
+A. DEFINE WHAT "GOOD" MEANS
+
+  [Step 1: Task contract]
+              |
+              v
+  [Step 2: Active rubric] --------------------> [Rubric fingerprint]
+              |                                         |
+              |                              [Human validation evidence]
+              |                                         |
+              |                              [Domain + product reviews]
+              |                                         |
+              |                              [Rubric approval JSON]
+              |
+              +--------------------------+
+                                         |
+  [Step 3: Human-labelled gold dataset]  |
+              |                          |
+              +--------------------------+
+                                         v
+B. RUN ONE CASE THROUGH TERRA AND LUNA
+
+  [Evaluation case + active rubric]
+              |
+              v
+  [Step 4: Prompt builder]
+              |
+              v
+  [Step 5: Azure OpenAI transport]
+              |
+              +-------------------+
+              |                   |
+              v                   v
+       [Terra response]      [Luna response]
+              |                   |
+              +---------+---------+
+                        |
+                        v
+          [Step 6: Pydantic validation]
+                        |
+                        v
+          [Step 7: Combine judgments]
+                   /             \
+                  v               v
+       [Models agree]      [Disagree or fail]
+                  |               |
+                  v               v
+          [Final decision] [Flag for human review]
+                   \             /
+                    +-----+-----+
+                          |
+                          v
+             [Step 8: Saved JSONL results]
+
+C. MEASURE WHETHER THE JUDGE IS TRUSTWORTHY
+
+  [Step 8 results] ----------------> [Step 9: Reliability metrics]
+          |                           agreement, Kappa, correlation,
+          |                           failure and human-review rates
+          |
+          +------------------------> [Step 11: Error analysis]
+                                      accuracy, precision, recall, F1,
+                                      false passes/fails, confidence bounds
+
+  [Step 3 gold dataset]
+          |
+          +--> [Step 10: Repeat prompts + swap A/B positions]
+                          |
+                          v
+                  [Stability report]
+
+D. MAKE THE RELEASE DECISION
+
+  [Step 9 reliability] --------+
+  [Step 11 error analysis] -----+
+  [Step 10 stability] ----------+--> [Step 12: Production gate]
+  [Reviewed thresholds] --------+             |
+  [Valid rubric approval] ------+       +-----+-----+
+                                        |           |
+                                        v           v
+                                     [PASS]       [FAIL]
+                                        |           |
+                                        v           v
+                                  [May release] [Fix and retest]
+
+E. IMPROVE AND ATTACK-TEST
+
+  [Step 16: Split gold data]
+             |
+             +--> [Calibration set: baseline -> developer change -> compare]
+             |                                      |
+             |                                [Accept or reject]
+             |                                      |
+             +--> [Protected held-out set] <--------+ accepted locked version
+                            |
+                            +--> [Run Steps 8-12 again]
+
+  [Step 14: Human-labelled prompt-injection cases]
+                            |
+                            +--> [Same Terra/Luna judging path]
+                            |
+                            +--> [Adversarial report for manual release review]
+
+  Step 13: production monitoring is not implemented yet.
+  Step 15: adversarial results are not automatically wired into Step 12 yet.
+```
+
+In simple terms:
+
+1. Humans define the task, rubric, examples, and trusted answer key.
+2. The prompt builder sends the same case to Terra and Luna.
+3. Pydantic rejects malformed model output before it can affect results.
+4. Agreement creates a combined decision; disagreement requires human review.
+5. The dataset runner saves results, then local code calculates reliability,
+   stability, error types, and statistical confidence.
+6. Step 12 passes only when the measurements, reviewed thresholds, and approval
+   for the exact rubric fingerprint all pass.
+7. Developers use calibration data to improve a configuration and the protected
+   held-out data to test the locked version without tuning to the final test.
+8. The separate adversarial suite checks whether candidate text can manipulate
+   Terra or Luna. Its report remains a manual release input until Step 15 is built.
+
 ## Step 1: evaluation contract
 
 The judge can score one answer, make a binary decision, or compare two blinded
